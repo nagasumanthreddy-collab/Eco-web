@@ -1,0 +1,107 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                  String   @id @default(cuid())
+  name                String
+  email               String   @unique
+  passwordHash        String
+  role                String   @default("VENDOR") // "ADMIN" | "VENDOR"
+  organizationName    String
+  organizationType    String   // "Restaurant" | "Hostel" | "Canteen" | "Event"
+  wasteAlertThreshold Float    @default(12.0) // percentage threshold for alerts
+  emailAlerts         Boolean  @default(true)
+  surplusAlerts       Boolean  @default(true)
+  dailyDigest         Boolean  @default(false)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  entries        DailyEntry[]
+  surplusItems   SurplusListing[]
+  pickupRequests PickupRequest[]
+  resetTokens    PasswordResetToken[]
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model DailyEntry {
+  id             String   @id @default(cuid())
+  date           String   // YYYY-MM-DD
+  mealType       String   // "Breakfast" | "Lunch" | "Dinner" | "Snacks"
+  category       String   // "Grains & Rice" | "Produce & Salads" | "Proteins & Mains" | "Bakery & Pastry" | "Dairy & Desserts"
+  preparedKg     Float
+  consumedKg     Float
+  leftoverKg     Float
+  headcount      Int
+  isSpecialEvent Boolean  @default(false)
+  eventLabel     String?
+  costPerKg      Float    @default(4.5)
+  notes          String?
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([userId, date])
+  @@index([date, mealType])
+}
+
+model NgoPartner {
+  id               String   @id @default(cuid())
+  name             String
+  address          String
+  distanceKm       Float
+  acceptedTypes    String
+  dailyCapacityKg  Float
+  contactPhone     String
+  contactEmail     String
+  operatingHours   String
+  createdAt        DateTime @default(now())
+
+  pickupRequests PickupRequest[]
+}
+
+model SurplusListing {
+  id            String   @id @default(cuid())
+  title         String
+  category      String
+  quantityKg    Float
+  mealType      String
+  expiryWindow  String
+  storageType   String   // "Refrigerated" | "Hot Hold" | "Ambient"
+  status        String   @default("AVAILABLE") // "AVAILABLE" | "REQUESTED" | "COLLECTED"
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  pickupRequests PickupRequest[]
+}
+
+model PickupRequest {
+  id         String         @id @default(cuid())
+  surplusId  String
+  surplus    SurplusListing @relation(fields: [surplusId], references: [id], onDelete: Cascade)
+  ngoId      String
+  ngo        NgoPartner     @relation(fields: [ngoId], references: [id], onDelete: Cascade)
+  userId     String
+  user       User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notes      String?
+  status     String         @default("SCHEDULED") // "SCHEDULED" | "IN_TRANSIT" | "COMPLETED"
+  pickupTime String
+  createdAt  DateTime       @default(now())
+}

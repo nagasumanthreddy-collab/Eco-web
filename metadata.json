@@ -1,0 +1,6 @@
+{
+  "name": "EcoPredict",
+  "description": "AI-powered food waste prediction, analytics, and surplus redistribution platform for restaurants, hostels, canteens, and event organizers.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
