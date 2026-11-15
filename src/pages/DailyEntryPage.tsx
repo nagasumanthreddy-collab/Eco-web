@@ -1,5 +1,6 @@
 import { Loader2, Trash2 } from 'lucide-react';
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { PageBanner } from '../components/PageBanner.tsx';
 import { TableRowsSkeleton } from '../components/Skeletons.tsx';
 import { useToast } from '../context/ToastContext.tsx';
 import { apiFetch } from '../lib/api.ts';
@@ -107,7 +108,16 @@ export function DailyEntryPage() {
   };
 
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+    <div className="space-y-6">
+      <PageBanner
+        imageSrc="/src/assets/images/entry_prep_scale_1794736952427.jpg"
+        imageAlt="Chef weighing freshly prepped vegetables and grains on a stainless steel digital kitchen scale"
+        kicker="Data Capture · Batch Weighing"
+        title="Log Meal Preparation, Consumption & Leftovers"
+        description="Recording post-service batch weights, diner headcount, and campus events calibrates the 28-day weighted forecasting engine."
+      />
+
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
       {/* Entry Form */}
       <section className="xl:col-span-5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#11191F] p-6">
         <h2 className="font-display text-lg font-semibold text-slate-900 dark:text-white">
@@ -441,6 +451,7 @@ export function DailyEntryPage() {
           </div>
         )}
       </section>
+      </div>
     </div>
   );
 }

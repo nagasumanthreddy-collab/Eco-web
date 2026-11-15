@@ -8,6 +8,7 @@ import {
   Truck,
 } from 'lucide-react';
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { PageBanner } from '../components/PageBanner.tsx';
 import { TableRowsSkeleton } from '../components/Skeletons.tsx';
 import { useToast } from '../context/ToastContext.tsx';
 import { apiFetch } from '../lib/api.ts';
@@ -142,7 +143,16 @@ export function SurplusPage() {
   };
 
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+    <div className="space-y-6">
+      <PageBanner
+        imageSrc="/src/assets/images/surplus_ngo_rescue_1794736952455.jpg"
+        imageAlt="Commercial kitchen staff handing sealed insulated food trays to a community food rescue volunteer beside an electric van"
+        kicker="Zero-Waste Dispatch · Community Impact"
+        title="Redistribute Unserved Meals to Nearby NGOs"
+        description="Publish safe surplus trays before expiry and schedule direct pickups with verified local shelters and community fridges."
+      />
+
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
       {/* Left: Surplus Batches */}
       <section className="xl:col-span-7 space-y-4">
         <div className="flex items-center justify-between gap-3">
@@ -512,6 +522,7 @@ export function SurplusPage() {
           ))}
         </div>
       </section>
+      </div>
     </div>
   );
 }

@@ -18,12 +18,15 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { PageBanner } from '../components/PageBanner.tsx';
 import { DashboardSkeleton } from '../components/Skeletons.tsx';
+import { useAuth } from '../context/AuthContext.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { apiFetch } from '../lib/api.ts';
 import type { DashboardSummary, ForecastResponse, WasteAlertItem } from '../types.ts';
 
 export function DashboardPage() {
+  const { user } = useAuth();
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [forecast, setForecast] = useState<ForecastResponse | null>(null);
   const [alerts, setAlerts] = useState<WasteAlertItem[]>([]);
@@ -106,6 +109,23 @@ export function DashboardPage() {
 
   return (
     <div className="space-y-6">
+      <PageBanner
+        imageSrc="/src/assets/images/dashboard_kitchen_banner_1794736951886.jpg"
+        imageAlt="Chefs portioning fresh grains and vegetables at a commercial kitchen pass with a digital prep tablet"
+        kicker={`${user?.organizationName || 'Kitchen Operations'} · ${user?.organizationType || 'Food Service'}`}
+        title="Daily Kitchen Sustainability Overview"
+        description="Track prepared vs. consumed volume, monitor category waste rates, and align tomorrow's batch quantities with real demand."
+        action={
+          <Link
+            to="/predictions"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition-colors whitespace-nowrap"
+          >
+            <span>View Tomorrow’s Prep</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        }
+      />
+
       {/* KPI Row */}
       <section aria-label="Key sustainability indicators" className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#11191F] p-5">

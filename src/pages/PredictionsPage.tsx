@@ -10,6 +10,7 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { PageBanner } from '../components/PageBanner.tsx';
 import { DashboardSkeleton } from '../components/Skeletons.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { apiFetch } from '../lib/api.ts';
@@ -73,6 +74,14 @@ export function PredictionsPage() {
 
   return (
     <div className="space-y-6">
+      <PageBanner
+        imageSrc="/src/assets/images/prediction_forecast_visual_1794736952636.jpg"
+        imageAlt="Modern institutional dining hall and canteen counter during busy lunch service"
+        kicker="Demand Forecasting · 7-Day Horizon"
+        title="Predict Diner Volume Before Firing the Kitchen"
+        description="Combines an exponentially weighted moving average with weekday seasonality and special-event uplift to recommend optimal prep weights."
+      />
+
       {/* Controls Toolbar */}
       <section className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#11191F] p-5 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-lg bg-slate-100 dark:bg-slate-800/70 w-fit">
