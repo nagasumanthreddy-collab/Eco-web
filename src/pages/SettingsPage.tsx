@@ -1,8 +1,8 @@
-import { Loader2, Shield } from 'lucide-react';
+import { Download, Loader2, Shield } from 'lucide-react';
 import { useEffect, useState, type FormEvent } from 'react';
 import { useAuth } from '../context/AuthContext.tsx';
 import { useToast } from '../context/ToastContext.tsx';
-import { apiFetch } from '../lib/api.ts';
+import { apiFetch, isOfflineBundle } from '../lib/api.ts';
 import type { AdminOrganization, OrganizationType, User } from '../types.ts';
 
 const ORG_TYPES: OrganizationType[] = ['Restaurant', 'Hostel', 'Canteen', 'Event'];
@@ -278,6 +278,27 @@ export function SettingsPage() {
           </div>
         </form>
       </section>
+
+      {!isOfflineBundle() && (
+        <section className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#11191F] p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <h2 className="font-display text-base font-semibold text-slate-900 dark:text-white">
+              Portable Offline App File
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+              Download a single self-contained HTML file that runs EcoPredict directly in your browser without a server or internet link.
+            </p>
+          </div>
+          <a
+            href="/api/download-offline"
+            download="ecopredict-offline.html"
+            className="px-4 py-2.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 dark:bg-emerald-600 dark:hover:bg-emerald-500 text-white text-xs font-semibold inline-flex items-center gap-2 whitespace-nowrap shrink-0"
+          >
+            <Download className="w-4 h-4" />
+            <span>Download Offline HTML</span>
+          </a>
+        </section>
+      )}
 
       {/* Admin-Only RBAC Organization Oversight */}
       {user?.role === 'ADMIN' && (

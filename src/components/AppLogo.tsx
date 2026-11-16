@@ -1,5 +1,6 @@
 import { Leaf } from 'lucide-react';
 import { useState } from 'react';
+import { ASSETS } from '../lib/assets.ts';
 
 interface AppLogoProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
@@ -28,7 +29,7 @@ export function AppLogo({ size = 'md', className = '' }: AppLogoProps) {
 
   return (
     <img
-      src="/src/assets/images/ecopredict_logo_1794735323792.jpg"
+      src={ASSETS.logo}
       alt="EcoPredict logo"
       referrerPolicy="no-referrer"
       onError={() => setFailed(true)}

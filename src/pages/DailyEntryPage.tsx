@@ -4,6 +4,7 @@ import { PageBanner } from '../components/PageBanner.tsx';
 import { TableRowsSkeleton } from '../components/Skeletons.tsx';
 import { useToast } from '../context/ToastContext.tsx';
 import { apiFetch } from '../lib/api.ts';
+import { ASSETS } from '../lib/assets.ts';
 import type { DailyEntry } from '../types.ts';
 
 const MEAL_TYPES = ['Breakfast', 'Lunch', 'Dinner', 'Snacks'];
@@ -110,7 +111,7 @@ export function DailyEntryPage() {
   return (
     <div className="space-y-6">
       <PageBanner
-        imageSrc="/src/assets/images/entry_prep_scale_1794736952427.jpg"
+        imageSrc={ASSETS.entryScale}
         imageAlt="Chef weighing freshly prepped vegetables and grains on a stainless steel digital kitchen scale"
         kicker="Data Capture · Batch Weighing"
         title="Log Meal Preparation, Consumption & Leftovers"

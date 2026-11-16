@@ -1,4 +1,14 @@
+import { offlineExportCsv, offlineRequest } from './offlineEngine.ts';
+
 const TOKEN_STORAGE_KEY = 'ecopredict_session_token';
+
+export function isOfflineBundle(): boolean {
+  if (typeof window === 'undefined') return false;
+  return (
+    window.location.protocol === 'file:' ||
+    import.meta.env.VITE_OFFLINE_BUNDLE === 'true'
+  );
+}
 
 export class ApiError extends Error {
   status: number;
@@ -32,6 +42,10 @@ export async function apiFetch<T>(
   path: string,
   options: RequestInit = {}
 ): Promise<T> {
+  if (isOfflineBundle()) {
+    return offlineRequest<T>(path, options);
+  }
+
   const headers = new Headers(options.headers);
   if (options.body && !headers.has('Content-Type')) {
     headers.set('Content-Type', 'application/json');
@@ -65,20 +79,27 @@ export async function apiFetch<T>(
 }
 
 export async function apiDownloadCsv(path: string, filename: string): Promise<void> {
-  const headers = new Headers();
-  const token = getStoredToken();
-  if (token) {
-    headers.set('Authorization', `Bearer ${token}`);
+  let blob: Blob;
+  if (isOfflineBundle()) {
+    const csvText = offlineExportCsv(path);
+    blob = new Blob([csvText], { type: 'text/csv;charset=utf-8;' });
+  } else {
+    const headers = new Headers();
+    const token = getStoredToken();
+    if (token) {
+      headers.set('Authorization', `Bearer ${token}`);
+    }
+
+    const response = await fetch(path, {
+      headers,
+      credentials: 'include',
+    });
+    if (!response.ok) {
+      throw new ApiError('Failed to export CSV', response.status);
+    }
+    blob = await response.blob();
   }
 
-  const response = await fetch(path, {
-    headers,
-    credentials: 'include',
-  });
-  if (!response.ok) {
-    throw new ApiError('Failed to export CSV', response.status);
-  }
-  const blob = await response.blob();
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
   anchor.href = url;

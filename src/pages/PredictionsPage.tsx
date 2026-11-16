@@ -14,6 +14,7 @@ import { PageBanner } from '../components/PageBanner.tsx';
 import { DashboardSkeleton } from '../components/Skeletons.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { apiFetch } from '../lib/api.ts';
+import { ASSETS } from '../lib/assets.ts';
 import type { ForecastResponse } from '../types.ts';
 
 const MEAL_FILTERS = ['All', 'Breakfast', 'Lunch', 'Dinner', 'Snacks'];
@@ -75,7 +76,7 @@ export function PredictionsPage() {
   return (
     <div className="space-y-6">
       <PageBanner
-        imageSrc="/src/assets/images/prediction_forecast_visual_1794736952636.jpg"
+        imageSrc={ASSETS.predictionDining}
         imageAlt="Modern institutional dining hall and canteen counter during busy lunch service"
         kicker="Demand Forecasting · 7-Day Horizon"
         title="Predict Diner Volume Before Firing the Kitchen"

@@ -12,6 +12,7 @@ import { PageBanner } from '../components/PageBanner.tsx';
 import { TableRowsSkeleton } from '../components/Skeletons.tsx';
 import { useToast } from '../context/ToastContext.tsx';
 import { apiFetch } from '../lib/api.ts';
+import { ASSETS } from '../lib/assets.ts';
 import type { NgoPartner, SurplusListing } from '../types.ts';
 
 const CATEGORIES = [
@@ -145,7 +146,7 @@ export function SurplusPage() {
   return (
     <div className="space-y-6">
       <PageBanner
-        imageSrc="/src/assets/images/surplus_ngo_rescue_1794736952455.jpg"
+        imageSrc={ASSETS.surplusRescue}
         imageAlt="Commercial kitchen staff handing sealed insulated food trays to a community food rescue volunteer beside an electric van"
         kicker="Zero-Waste Dispatch · Community Impact"
         title="Redistribute Unserved Meals to Nearby NGOs"

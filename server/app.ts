@@ -1,6 +1,8 @@
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { type NextFunction, type Request, type Response } from 'express';
+import fs from 'fs';
+import path from 'path';
 import adminRoutes from './routes/admin.ts';
 import alertsRoutes from './routes/alerts.ts';
 import authRoutes from './routes/auth.ts';
@@ -37,6 +39,15 @@ export function createApp() {
 
   app.get('/api/health', (_req: Request, res: Response) => {
     res.json({ status: 'ok', service: 'ecopredict-api' });
+  });
+
+  app.get('/api/download-offline', (_req: Request, res: Response) => {
+    const filePath = path.resolve(process.cwd(), 'public/ecopredict-offline.html');
+    if (!fs.existsSync(filePath)) {
+      res.status(404).json({ error: 'Offline bundle not generated yet.' });
+      return;
+    }
+    res.download(filePath, 'ecopredict-offline.html');
   });
 
   app.use('/api/auth', authRoutes);

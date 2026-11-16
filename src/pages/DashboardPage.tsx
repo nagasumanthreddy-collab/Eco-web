@@ -23,6 +23,7 @@ import { DashboardSkeleton } from '../components/Skeletons.tsx';
 import { useAuth } from '../context/AuthContext.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { apiFetch } from '../lib/api.ts';
+import { ASSETS } from '../lib/assets.ts';
 import type { DashboardSummary, ForecastResponse, WasteAlertItem } from '../types.ts';
 
 export function DashboardPage() {
@@ -110,7 +111,7 @@ export function DashboardPage() {
   return (
     <div className="space-y-6">
       <PageBanner
-        imageSrc="/src/assets/images/dashboard_kitchen_banner_1794736951886.jpg"
+        imageSrc={ASSETS.dashboardBanner}
         imageAlt="Chefs portioning fresh grains and vegetables at a commercial kitchen pass with a digital prep tablet"
         kicker={`${user?.organizationName || 'Kitchen Operations'} · ${user?.organizationType || 'Food Service'}`}
         title="Daily Kitchen Sustainability Overview"

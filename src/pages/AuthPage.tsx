@@ -2,6 +2,7 @@ import {
   AlertCircle,
   ArrowLeft,
   Check,
+  Download,
   Eye,
   EyeOff,
   Loader2,
@@ -14,7 +15,8 @@ import { AppLogo } from '../components/AppLogo.tsx';
 import { useAuth } from '../context/AuthContext.tsx';
 import { useTheme } from '../context/ThemeContext.tsx';
 import { useToast } from '../context/ToastContext.tsx';
-import { apiFetch } from '../lib/api.ts';
+import { apiFetch, isOfflineBundle } from '../lib/api.ts';
+import { ASSETS } from '../lib/assets.ts';
 import type { OrganizationType } from '../types.ts';
 
 type AuthMode = 'login' | 'signup' | 'forgot';
@@ -214,7 +216,7 @@ export function AuthPage() {
       <div className="relative hidden lg:flex flex-col justify-between overflow-hidden bg-emerald-950 text-white p-10">
         {!imageError ? (
           <img
-            src="/src/assets/images/auth_ecotech_illustration_1794722546250.jpg"
+            src={ASSETS.authIllustration}
             alt="Sustainable commercial kitchen with vertical herb farm and digital prep tablet"
             referrerPolicy="no-referrer"
             onError={() => setImageError(true)}
@@ -713,9 +715,19 @@ export function AuthPage() {
           )}
         </div>
 
-        <p className="text-xs text-slate-500 dark:text-slate-500 text-center">
-          EcoPredict Kitchen Sustainability Platform
-        </p>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500 dark:text-slate-500">
+          <span>EcoPredict Kitchen Sustainability Platform</span>
+          {!isOfflineBundle() && (
+            <a
+              href="/api/download-offline"
+              download="ecopredict-offline.html"
+              className="inline-flex items-center gap-1.5 font-semibold text-emerald-700 dark:text-emerald-400 hover:underline whitespace-nowrap"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Download Offline App (.html)</span>
+            </a>
+          )}
+        </div>
       </div>
     </div>
   );

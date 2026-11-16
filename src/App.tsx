@@ -1,12 +1,13 @@
 import { AnimatePresence } from 'motion/react';
-import { useState } from 'react';
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import { useState, type ReactNode } from 'react';
+import { BrowserRouter, HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Layout } from './components/Layout.tsx';
 import { ProtectedRoute } from './components/ProtectedRoute.tsx';
 import { SplashScreen } from './components/SplashScreen.tsx';
 import { AuthProvider, useAuth } from './context/AuthContext.tsx';
 import { ThemeProvider } from './context/ThemeContext.tsx';
 import { ToastProvider } from './context/ToastContext.tsx';
+import { isOfflineBundle } from './lib/api.ts';
 import { AlertsPage } from './pages/AlertsPage.tsx';
 import { AnalyticsPage } from './pages/AnalyticsPage.tsx';
 import { AuthPage } from './pages/AuthPage.tsx';
@@ -22,6 +23,13 @@ function LoginRedirectWrapper() {
     return <Navigate to="/" replace />;
   }
   return <AuthPage />;
+}
+
+function RouterShell({ children }: { children: ReactNode }) {
+  if (isOfflineBundle()) {
+    return <HashRouter>{children}</HashRouter>;
+  }
+  return <BrowserRouter>{children}</BrowserRouter>;
 }
 
 export default function App() {
@@ -42,7 +50,7 @@ export default function App() {
           </AnimatePresence>
 
           {!showSplash && (
-            <BrowserRouter>
+            <RouterShell>
               <Routes>
                 <Route path="/login" element={<LoginRedirectWrapper />} />
                 <Route
@@ -63,7 +71,7 @@ export default function App() {
                 </Route>
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>
-            </BrowserRouter>
+            </RouterShell>
           )}
         </AuthProvider>
       </ToastProvider>
